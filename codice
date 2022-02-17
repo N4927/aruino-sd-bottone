@@ -1,11 +1,15 @@
 #include <SD.h>
 File myFile;
 int stato = 0;
+int statoVecchio = 0;
+int stato2 = 0;
+int statoVecchio2 = 0;
 double tempo = 0;
 
 
 void setup() {
   pinMode(5, INPUT);
+  pinMode(6, INPUT);
 
   
   if (SD.begin(10))
@@ -44,14 +48,16 @@ void setup() {
 void loop() {
   // guarda se il bottone è premuto o no
   stato = digitalRead(5);
+  stato = digitalRead(6);
   //tiene il tempo, facendolo aumentare di 0.02 ogni loop aumenta di 1 ogni secondo
   tempo = tempo +0.02;
   
-   myFile = SD.open("csv.txt", FILE_WRITE);     
+  if (stato =! statoVecchio){
+     myFile = SD.open("csv.txt", FILE_WRITE);     
     // if the file opened okay, write to it:
     if (myFile) 
     {
-          
+      myFile.println("bottone 1:");      
 
       myFile.println(stato);
       myFile.println(tempo);
@@ -63,5 +69,28 @@ void loop() {
       myFile.close();
   
     } 
+    
+    }
+    if (stato2 =! statoVecchio2){
+     myFile = SD.open("csv.txt", FILE_WRITE);     
+    // if the file opened okay, write to it:
+    if (myFile) 
+    {
+      myFile.println("bottone 2:");      
+
+      myFile.println(stato);
+      myFile.println(tempo);
+   
+      
+      myFile.println("...............................................");
+     
+
+      myFile.close();
+  
+    } 
+    
+    }
+    statoVecchio = stato;
+    statoVecchio2 = stato2;
 
 }
